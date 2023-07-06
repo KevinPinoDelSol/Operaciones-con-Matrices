@@ -1,0 +1,474 @@
+; multi-segment executable file template.
+
+data segment
+; add your data here!
+string db 5,7 dup('?')
+ancho db 0
+alto db 0
+salto db 10,13,'$'
+mensajeEntrada db "Este programa le permitira hacer sumas o restas de matrices$"
+
+mDimensiones db "Ingrese las dimensiones de sus matrices$"
+mAncho db "Ingrese el ancho: $"
+mAlto  db "Ingrese el alto:  $"
+
+mIngresarValores1 db "Ingrese los valores de la primera matriz uno por uno:",10,13,'$'
+mIngresarValores2 db "Ingrese los valores de la segunda matriz uno por uno:",10,13,'$'
+mOperacion db "Elija la operacion a realizar:",10,13,'$'
+mSuma db " 0 suma",10,13,'$'
+mResta db " 1 resta",10,13,'$'
+mDespedida db "Ahi tiene el resultado, tenga un buen día.",10,13,'$'
+operacion db 0
+
+matriz db 0
+
+
+
+ends
+
+stack segment
+dw   128  dup(0)
+ends
+
+code segment
+;macro para leer un entero y guardarlo en ax
+leerEnteroW proc
+saveR
+
+lea dx, string
+mov ax, 0a00h
+int 21h
+
+lea bx, string; pone el indice en el inicio del string
+
+inc bx
+mov ch, 0
+mov cl, DS:[bx];copia a cx la cantidad de valores entrados
+inc bx
+
+loopDeGuardado:
+push cx
+dec cx
+push bx
+;dec cx
+mov ax, 10; para convertir a potencias de 10
+;ahora esta guardado i del loop en la pila, y en dx el numero al que hay que hayar la potencia
+call potencia
+pop bx
+
+mov cl, DS:[bx]
+sub cl, 30h; guardando la cifra en cx
+
+mul cx
+
+pop cx
+push ax
+inc bx
+loop loopDeGuardado
+
+mov ax,0
+lea bx, string
+mov cl, [bx+1]
+loopDeSumaL:
+pop bx
+add ax, bx
+loop loopDeSumaL
+
+loadR
+ret
+leerEnteroW endP
+
+proc printByte
+saveR
+push dx
+mov al, [bx]
+mov ah, 0
+mov cl, 10
+
+lea bx, string
+add bx, 7
+
+mov [bx], '$'
+dec bx
+
+mov cx, 5
+mov dl, 10
+sacarDigito:
+div dl
+add ah, 30h
+mov [bx], ah
+mov ah, 0
+dec bx
+dec cx
+cmp al, 0
+jne sacarDigito
+
+pop dx
+cmp dl, 0
+je ponerEspacios
+mov [bx], 240
+dec bx
+dec cx
+
+ponerEspacios:
+mov [bx], 20h
+dec bx
+loop ponerEspacios
+inc bx
+
+mov ah, 9
+mov dx, bx
+int 21h
+loadR
+ret
+EndP
+
+
+
+
+
+
+potencia proc
+cmp cx,0
+jne Pprocecimiento
+mov ax, 1
+je pEnd
+Pprocecimiento:
+mov bx, ax
+mov ax, 1
+
+Pmultiplicacion:
+mul bx
+loop Pmultiplicacion
+
+pEnd:
+ret
+potencia endp
+
+proc colocarCursor
+saveR
+lea ax, matriz
+sub bx, ax
+
+;obteniendo el lugar de la matriz
+mov ax, bx
+mov bl, 3
+div bl
+
+mov ah, 0
+
+;guardando el ancho de la matriz en cx
+lea bx, ancho
+mov cl, [bx]
+
+
+div cl
+
+
+mov al, ah
+mov ah,0
+mov cx,4
+mul cx
+
+push ax
+
+mov ah, 3h
+int 10h
+
+pop ax
+mov dl,al
+mov ah,2
+int 10h
+
+loadR
+ret
+colocarCursor EndP
+
+Macro colocarC
+saveR
+;leer posicion del cursor
+mov ah, 3h
+int 10h
+;calcular siguiente posicion
+mov bl, 5
+mov al, dl
+mov ah, 0
+div bl
+mov al, dl
+sub al, ah
+add al, 5
+push ax
+
+;posicionar el cursor
+mov ah, 03h
+int 10h
+pop ax
+mov dl,al
+mov ah,2
+int 10h
+
+loadR
+EndM
+
+
+proc sumar
+mov cx, 0h
+lea bx, alto
+mov cl, [bx]
+
+lea bx, matriz
+
+ForI3:
+push cx
+push bx
+
+lea bx, ancho
+mov cl, [bx]
+
+pop bx
+ForJ3:
+saveR
+mov al, [bx]
+inc bx
+mov cl, [bx]
+inc bx
+add al, cl
+mov [bx], al
+mov dl, 0
+call PrintByte
+
+inc bx
+loadR
+add bx, 3
+;colocarC
+loop ForJ3
+saltarL
+
+pop cx
+loop ForI3
+
+ret
+sumar EndP
+
+
+
+proc restar
+mov cx, 0h
+lea bx, alto
+mov cl, [bx]
+
+lea bx, matriz
+
+ForI4:
+push cx
+push bx
+
+lea bx, ancho
+mov cl, [bx]
+
+pop bx
+ForJ4:
+saveR
+mov al, [bx]
+inc bx
+mov cl, [bx]
+inc bx
+
+;verificando el signo
+
+cmp al, cl
+jae positivo
+sub cl, al
+mov [bx], cl
+mov dl, 1
+jmp imprimirResta
+positivo:
+sub al, cl
+mov [bx], al
+mov dl, 0
+
+imprimirResta:
+
+call PrintByte
+
+inc bx
+loadR
+add bx, 3
+;colocarC
+loop ForJ4
+saltarL
+
+pop cx
+loop ForI4
+
+ret
+restar EndP
+
+
+guardarAl Macro memoria
+lea bx, memoria
+mov [bx], al
+EndM
+
+saltarL Macro
+mov ah, 9
+lea dx, salto
+int 21h
+EndM
+
+print Macro dir
+lea dx, dir
+mov ah, 9
+int 21h
+EndM
+
+saveR Macro
+push bx
+push cx
+push dx
+EndM
+
+loadR Macro
+pop dx
+pop cx
+pop bx
+EndM
+
+
+start:
+; set segment registers:
+mov ax, data
+mov ds, ax
+mov es, ax
+
+mov ax, stack
+mov ss, ax
+
+;impimiendo bienvenida
+print mensajeEntrada
+saltarL
+
+;pidiendo dimensiones
+print mDimensiones
+saltarL
+
+print mAncho
+call leerEnteroW
+guardarAl ancho
+saltarL
+
+print mAlto
+call leerEnteroW
+guardarAl alto
+saltarL
+
+saltarL
+
+print mIngresarValores1
+saltarL
+;preparando para leer las matrices
+mov cx, 0h
+lea bx, alto
+mov cl, [bx]
+
+lea bx, matriz
+
+ForI1:
+push cx
+push bx
+
+lea bx, ancho
+mov cl, [bx]
+
+pop bx
+ForJ1:
+call leerEnteroW
+mov [bx], al
+add bx, 3
+call colocarCursor
+
+loop ForJ1
+saltarL
+
+pop cx
+loop ForI1
+
+;pidiendo la segunda matriz
+saltarL
+saltarL
+print mIngresarValores2
+saltarL
+;leyendo la segunda matriz
+mov cx, 0h
+lea bx, alto
+mov cl, [bx]
+
+lea bx, matriz
+inc bx
+
+ForI2:
+push cx
+push bx
+
+lea bx, ancho
+mov cl, [bx]
+
+pop bx
+ForJ2:
+call leerEnteroW
+mov [bx], al
+add bx, 3
+call colocarCursor
+
+loop ForJ2
+saltarL
+
+pop cx
+loop ForI2
+
+;pidiendo la operacion
+saltarL
+saltarL
+print mOperacion
+print mSuma
+print mResta
+
+mov ah, 1
+int 21h
+lea bx, operacion
+mov [bx], al
+
+push ax
+saltarL
+saltarL
+pop ax
+
+
+cmp al, '0'
+je suma
+call restar
+jmp despedir
+suma:
+call sumar
+
+despedir:
+print mDespedida
+
+
+
+
+
+; wait for any key....
+mov ah, 1
+int 21h
+
+mov ax, 4c00h ; exit to operating system.
+int 21h
+ends
+
+end start ; set entry point and stop the assembler.
+
+
+
+
+; [SOURCE]: C:\emu8086\MySource\Proyecto.asm

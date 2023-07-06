@@ -1,0 +1,53 @@
+< THE SYMBOL TABLE >  Proyecto.exe_  --  emu8086 assembler version: 4.08 
+===================================================================================================
+Name                     	Offset    	Size      	Type      	Segment   
+===================================================================================================
+DATA                     	00000     	-5        	SEGMENT   	(ITSELF)  
+STRING                   	00000     	1         	VAR       	data      
+ANCHO                    	00008     	1         	VAR       	data      
+ALTO                     	00009     	1         	VAR       	data      
+SALTO                    	0000A     	1         	VAR       	data      
+MENSAJEENTRADA           	0000D     	1         	VAR       	data      
+MDIMENSIONES             	00049     	1         	VAR       	data      
+MANCHO                   	00071     	1         	VAR       	data      
+MALTO                    	00084     	1         	VAR       	data      
+MINGRESARVALORES1        	00097     	1         	VAR       	data      
+MINGRESARVALORES2        	000CF     	1         	VAR       	data      
+MOPERACION               	00107     	1         	VAR       	data      
+MSUMA                    	00128     	1         	VAR       	data      
+MRESTA                   	00132     	1         	VAR       	data      
+MDESPEDIDA               	0013D     	1         	VAR       	data      
+OPERACION                	0016A     	1         	VAR       	data      
+MATRIZ                   	0016B     	1         	VAR       	data      
+STACK                    	00017     	-5        	SEGMENT   	(ITSELF)  
+CODE                     	00027     	-5        	SEGMENT   	(ITSELF)  
+LEERENTEROW              	00000     	-1        	NEAR      	code      
+LOOPDEGUARDADO           	00015     	-1        	LABEL     	code      
+LOOPDESUMAL              	00035     	-1        	LABEL     	code      
+PRINTBYTE                	0003E     	-1        	NEAR      	code      
+SACARDIGITO              	00057     	-1        	LABEL     	code      
+PONERESPACIOS            	00071     	-1        	LABEL     	code      
+POTENCIA                 	00082     	-1        	NEAR      	code      
+PPROCECIMIENTO           	0008C     	-1        	LABEL     	code      
+PMULTIPLICACION          	00091     	-1        	LABEL     	code      
+PEND                     	00095     	-1        	LABEL     	code      
+COLOCARCURSOR            	00096     	-1        	NEAR      	code      
+SUMAR                    	000C6     	-1        	NEAR      	code      
+FORI3                    	000D1     	-1        	LABEL     	code      
+FORJ3                    	000D9     	-1        	LABEL     	code      
+RESTAR                   	000FF     	-1        	NEAR      	code      
+FORI4                    	0010A     	-1        	LABEL     	code      
+FORJ4                    	00112     	-1        	LABEL     	code      
+POSITIVO                 	00127     	-1        	LABEL     	code      
+IMPRIMIRRESTA            	0012D     	-1        	LABEL     	code      
+START                    	00144     	-1        	LABEL     	code      
+FORI1                    	001B8     	-1        	LABEL     	code      
+FORJ1                    	001C0     	-1        	LABEL     	code      
+FORI2                    	001FF     	-1        	LABEL     	code      
+FORJ2                    	00207     	-1        	LABEL     	code      
+SUMA                     	00263     	-1        	LABEL     	code      
+DESPEDIR                 	00266     	-1        	LABEL     	code      
+===================================================================================================
+[ 02/07/2023  --  23:13:47 ] 
+< END >
+ 

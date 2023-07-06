@@ -1,0 +1,574 @@
+EMU8086 GENERATED LISTING. MACHINE CODE <- SOURCE.
+ 
+Proyecto.exe -- emu8086 assembler version: 4.08  
+ 
+[ 06/07/2023  --  21:23:12 ] 
+ 
+===================================================================================================
+[LINE]     LOC: MACHINE CODE                          SOURCE
+===================================================================================================
+ 
+[   1]        :                                       ; multi-segment executable file template.
+[   2]        :                                       
+[   3]        :                                       data segment
+[   4]        :                                       ; add your data here!
+[   5]    0000: 05 3F 3F 3F 3F 3F 3F 3F               string db 5,7 dup('?')
+[   6]    0008: 00                                    ancho db 0
+[   7]    0009: 00                                    alto db 0
+[   8]    000A: 0A 0D 24                              salto db 10,13,'$'
+[   9]    000D: 45 73 74 65 20 70 72 6F 67 72 61 6D   mensajeEntrada db "Este programa le permitira hacer sumas o restas de matrices$"
+                61 20 6C 65 20 70 65 72 6D 69 74 69 
+                72 61 20 68 61 63 65 72 20 73 75 6D 
+                61 73 20 6F 20 72 65 73 74 61 73 20 
+                64 65 20 6D 61 74 72 69 63 65 73 24 
+                                                    
+[  10]        :                                       
+[  11]    0049: 49 6E 67 72 65 73 65 20 6C 61 73 20   mDimensiones db "Ingrese las dimensiones de sus matrices$"
+                64 69 6D 65 6E 73 69 6F 6E 65 73 20 
+                64 65 20 73 75 73 20 6D 61 74 72 69 
+                63 65 73 24                         
+[  12]    0071: 49 6E 67 72 65 73 65 20 65 6C 20 61   mAncho db "Ingrese el ancho: $"
+                6E 63 68 6F 3A 20 24                
+[  13]    0084: 49 6E 67 72 65 73 65 20 65 6C 20 61   mAlto  db "Ingrese el alto:  $"
+                6C 74 6F 3A 20 20 24                
+[  14]        :                                       
+[  15]    0097: 49 6E 67 72 65 73 65 20 6C 6F 73 20   mIngresarValores1 db "Ingrese los valores de la primera matriz uno por uno:",10,13,'$'
+                76 61 6C 6F 72 65 73 20 64 65 20 6C 
+                61 20 70 72 69 6D 65 72 61 20 6D 61 
+                74 72 69 7A 20 75 6E 6F 20 70 6F 72 
+                20 75 6E 6F 3A 0A 0D 24             
+[  16]    00CF: 49 6E 67 72 65 73 65 20 6C 6F 73 20   mIngresarValores2 db "Ingrese los valores de la segunda matriz uno por uno:",10,13,'$'
+                76 61 6C 6F 72 65 73 20 64 65 20 6C 
+                61 20 73 65 67 75 6E 64 61 20 6D 61 
+                74 72 69 7A 20 75 6E 6F 20 70 6F 72 
+                20 75 6E 6F 3A 0A 0D 24             
+[  17]    0107: 45 6C 69 6A 61 20 6C 61 20 6F 70 65   mOperacion db "Elija la operacion a realizar:",10,13,'$'
+                72 61 63 69 6F 6E 20 61 20 72 65 61 
+                6C 69 7A 61 72 3A 0A 0D 24          
+[  18]    0128: 20 30 20 73 75 6D 61 0A 0D 24         mSuma db " 0 suma",10,13,'$'
+[  19]    0132: 20 31 20 72 65 73 74 61 0A 0D 24      mResta db " 1 resta",10,13,'$'
+[  20]    013D: 41 68 69 20 74 69 65 6E 65 20 65 6C   mDespedida db "Ahi tiene el resultado, tenga un buen día.",10,13,'$'
+                20 72 65 73 75 6C 74 61 64 6F 2C 20 
+                74 65 6E 67 61 20 75 6E 20 62 75 65 
+                6E 20 64 ED 61 2E 0A 0D 24          
+[  21]    016A: 00                                    operacion db 0
+[  22]        :                                       
+[  23]    016B: 00                                    matriz db 0
+[  24]        :                                       
+[  25]        :                                       
+[  26]        :                                       
+[  27]        :                                       ends
+[  28]        :                                       
+[  29]        :                                       stack segment
+[  30]    0170: 00 00 00 00 00 00 00 00 00 00 00 00   dw   128  dup(0)
+                00 00 00 00 00 00 00 00 00 00 00 00 
+                00 00 00 00 00 00 00 00 00 00 00 00 
+                00 00 00 00 00 00 00 00 00 00 00 00 
+                00 00 00 00 00 00 00 00 00 00 00 00 
+                00 00 00 00 00 00 00 00 00 00 00 00 
+                00 00 00 00 00 00 00 00 00 00 00 00 
+                00 00 00 00 00 00 00 00 00 00 00 00 
+                00 00 00 00 00 00 00 00 00 00 00 00 
+                00 00 00 00 00 00 00 00 00 00 00 00 
+                00 00 00 00 00 00 00 00 00 00 00 00 
+                00 00 00 00 00 00 00 00 00 00 00 00 
+                00 00 00 00 00 00 00 00 00 00 00 00 
+                00 00 00 00 00 00 00 00 00 00 00 00 
+                00 00 00 00 00 00 00 00 00 00 00 00 
+                00 00 00 00 00 00 00 00 00 00 00 00 
+                00 00 00 00 00 00 00 00 00 00 00 00 
+                00 00 00 00 00 00 00 00 00 00 00 00 
+                00 00 00 00 00 00 00 00 00 00 00 00 
+                00 00 00 00 00 00 00 00 00 00 00 00 
+                00 00 00 00 00 00 00 00 00 00 00 00 
+                00 00 00 00                         
+[  31]        :                                       ends
+[  32]        :                                       
+[  33]        :                                       code segment
+[  34]        :                                       ;macro para leer un entero y guardarlo en ax
+[  35]    0270:                                       leerEnteroW proc
+[  36]    0270: 53 51 52                              saveR
+[  37]        :                                       
+[  38]    0273: BA 00 00                              lea dx, string
+[  39]    0276: B8 00 0A                              mov ax, 0a00h
+[  40]    0279: CD 21                                 int 21h
+[  41]        :                                       
+[  42]    027B: BB 00 00                              lea bx, string; pone el indice en el inicio del string
+[  43]        :                                       
+[  44]    027E: 43                                    inc bx
+[  45]    027F: B5 00                                 mov ch, 0
+[  46]    0281: 3E 8A 0F                              mov cl, DS:[bx];copia a cx la cantidad de valores entrados
+[  47]    0284: 43                                    inc bx
+[  48]        :                                       
+[  49]    0285:                                       loopDeGuardado:
+[  50]    0285: 51                                    push cx
+[  51]    0286: 49                                    dec cx
+[  52]    0287: 53                                    push bx
+[  53]        :                                       ;dec cx
+[  54]    0288: B8 0A 00                              mov ax, 10; para convertir a potencias de 10
+[  55]        :                                       ;ahora esta guardado i del loop en la pila, y en dx el numero al que hay que hayar la potencia
+[  56]    028B: E8 64 00                              call potencia
+[  57]    028E: 5B                                    pop bx
+[  58]        :                                       
+[  59]    028F: 3E 8A 0F                              mov cl, DS:[bx]
+[  60]    0292: 80 E9 30                              sub cl, 30h; guardando la cifra en cx
+[  61]        :                                       
+[  62]    0295: F7 E1                                 mul cx
+[  63]        :                                       
+[  64]    0297: 59                                    pop cx
+[  65]    0298: 50                                    push ax
+[  66]    0299: 43                                    inc bx
+[  67]    029A: E2 E9                                 loop loopDeGuardado
+[  68]        :                                       
+[  69]    029C: B8 00 00                              mov ax,0
+[  70]    029F: BB 00 00                              lea bx, string
+[  71]    02A2: 8A 4F 01                              mov cl, [bx+1]
+[  72]    02A5:                                       loopDeSumaL:
+[  73]    02A5: 5B                                    pop bx
+[  74]    02A6: 03 C3                                 add ax, bx
+[  75]    02A8: E2 FB                                 loop loopDeSumaL
+[  76]        :                                       
+[  77]    02AA: 5A 59 5B                              loadR
+[  78]    02AD: C3                                    ret
+[  79]        :                                       leerEnteroW endP
+[  80]        :                                       
+[  81]    02AE:                                       proc printByte
+[  82]    02AE: 53 51 52                              saveR
+[  83]    02B1: 52                                    push dx
+[  84]    02B2: 8A 07                                 mov al, [bx]
+[  85]    02B4: B4 00                                 mov ah, 0
+[  86]    02B6: B1 0A                                 mov cl, 10
+[  87]        :                                       
+[  88]    02B8: BB 00 00                              lea bx, string
+[  89]    02BB: 83 C3 07                              add bx, 7
+[  90]        :                                       
+[  91]    02BE: C6 07 24                              mov [bx], '$'
+[  92]    02C1: 4B                                    dec bx
+[  93]        :                                       
+[  94]    02C2: B9 05 00                              mov cx, 5
+[  95]    02C5: B2 0A                                 mov dl, 10
+[  96]    02C7:                                       sacarDigito:
+[  97]    02C7: F6 F2                                 div dl
+[  98]    02C9: 80 C4 30                              add ah, 30h
+[  99]    02CC: 88 27                                 mov [bx], ah
+[ 100]    02CE: B4 00                                 mov ah, 0
+[ 101]    02D0: 4B                                    dec bx
+[ 102]    02D1: 49                                    dec cx
+[ 103]    02D2: 3C 00                                 cmp al, 0
+[ 104]    02D4: 75 F1                                 jne sacarDigito
+[ 105]        :                                       
+[ 106]    02D6: 5A                                    pop dx
+[ 107]    02D7: 80 FA 00                              cmp dl, 0
+[ 108]    02DA: 74 05                                 je ponerEspacios
+[ 109]    02DC: C6 07 F0                              mov [bx], 240
+[ 110]    02DF: 4B                                    dec bx
+[ 111]    02E0: 49                                    dec cx
+[ 112]        :                                       
+[ 113]    02E1:                                       ponerEspacios:
+[ 114]    02E1: C6 07 20                              mov [bx], 20h
+[ 115]    02E4: 4B                                    dec bx
+[ 116]    02E5: E2 FA                                 loop ponerEspacios
+[ 117]    02E7: 43                                    inc bx
+[ 118]        :                                       
+[ 119]    02E8: B4 09                                 mov ah, 9
+[ 120]    02EA: 8B D3                                 mov dx, bx
+[ 121]    02EC: CD 21                                 int 21h
+[ 122]    02EE: 5A 59 5B                              loadR
+[ 123]    02F1: C3                                    ret
+[ 124]        :                                       EndP
+[ 125]        :                                       
+[ 126]        :                                       
+[ 127]        :                                       
+[ 128]        :                                       
+[ 129]        :                                       
+[ 130]        :                                       
+[ 131]    02F2:                                       potencia proc
+[ 132]    02F2: 83 F9 00                              cmp cx,0
+[ 133]    02F5: 75 05                                 jne Pprocecimiento
+[ 134]    02F7: B8 01 00                              mov ax, 1
+[ 135]    02FA: 74 09                                 je pEnd
+[ 136]    02FC:                                       Pprocecimiento:
+[ 137]    02FC: 8B D8                                 mov bx, ax
+[ 138]    02FE: B8 01 00                              mov ax, 1
+[ 139]        :                                       
+[ 140]    0301:                                       Pmultiplicacion:
+[ 141]    0301: F7 E3                                 mul bx
+[ 142]    0303: E2 FC                                 loop Pmultiplicacion
+[ 143]        :                                       
+[ 144]    0305:                                       pEnd:
+[ 145]    0305: C3                                    ret
+[ 146]        :                                       potencia endp
+[ 147]        :                                       
+[ 148]    0306:                                       proc colocarCursor
+[ 149]    0306: 53 51 52                              saveR
+[ 150]    0309: B8 6B 01                              lea ax, matriz
+[ 151]    030C: 2B D8                                 sub bx, ax
+[ 152]        :                                       
+[ 153]        :                                       ;obteniendo el lugar de la matriz
+[ 154]    030E: 8B C3                                 mov ax, bx
+[ 155]    0310: B3 03                                 mov bl, 3
+[ 156]    0312: F6 F3                                 div bl
+[ 157]        :                                       
+[ 158]    0314: B4 00                                 mov ah, 0
+[ 159]        :                                       
+[ 160]        :                                       ;guardando el ancho de la matriz en cx
+[ 161]    0316: BB 08 00                              lea bx, ancho
+[ 162]    0319: 8A 0F                                 mov cl, [bx]
+[ 163]        :                                       
+[ 164]        :                                       
+[ 165]    031B: F6 F1                                 div cl
+[ 166]        :                                       
+[ 167]        :                                       
+[ 168]    031D: 8A C4                                 mov al, ah
+[ 169]    031F: B4 00                                 mov ah,0
+[ 170]    0321: B9 04 00                              mov cx,4
+[ 171]    0324: F7 E1                                 mul cx
+[ 172]        :                                       
+[ 173]    0326: 50                                    push ax
+[ 174]        :                                       
+[ 175]    0327: B4 03                                 mov ah, 3h
+[ 176]    0329: CD 10                                 int 10h
+[ 177]        :                                       
+[ 178]    032B: 58                                    pop ax
+[ 179]    032C: 8A D0                                 mov dl,al
+[ 180]    032E: B4 02                                 mov ah,2
+[ 181]    0330: CD 10                                 int 10h
+[ 182]        :                                       
+[ 183]    0332: 5A 59 5B                              loadR
+[ 184]    0335: C3                                    ret
+[ 185]        :                                       colocarCursor EndP
+[ 186]        :                                       
+[ 187]        :                                       Macro colocarC
+[ 188]        :                                       saveR
+[ 189]        :                                       ;leer posicion del cursor
+[ 190]        :                                       mov ah, 3h
+[ 191]        :                                       int 10h
+[ 192]        :                                       ;calcular siguiente posicion
+[ 193]        :                                       mov bl, 5
+[ 194]        :                                       mov al, dl
+[ 195]        :                                       mov ah, 0
+[ 196]        :                                       div bl
+[ 197]        :                                       mov al, dl
+[ 198]        :                                       sub al, ah
+[ 199]        :                                       add al, 5
+[ 200]        :                                       push ax
+[ 201]        :                                       
+[ 202]        :                                       ;posicionar el cursor
+[ 203]        :                                       mov ah, 03h
+[ 204]        :                                       int 10h
+[ 205]        :                                       pop ax
+[ 206]        :                                       mov dl,al
+[ 207]        :                                       mov ah,2
+[ 208]        :                                       int 10h
+[ 209]        :                                       
+[ 210]        :                                       loadR
+[ 211]        :                                       EndM
+[ 212]        :                                       
+[ 213]        :                                       
+[ 214]    0336:                                       proc sumar
+[ 215]    0336: B9 00 00                              mov cx, 0h
+[ 216]    0339: BB 09 00                              lea bx, alto
+[ 217]    033C: 8A 0F                                 mov cl, [bx]
+[ 218]        :                                       
+[ 219]    033E: BB 6B 01                              lea bx, matriz
+[ 220]        :                                       
+[ 221]    0341:                                       ForI3:
+[ 222]    0341: 51                                    push cx
+[ 223]    0342: 53                                    push bx
+[ 224]        :                                       
+[ 225]    0343: BB 08 00                              lea bx, ancho
+[ 226]    0346: 8A 0F                                 mov cl, [bx]
+[ 227]        :                                       
+[ 228]    0348: 5B                                    pop bx
+[ 229]    0349:                                       ForJ3:
+[ 230]    0349: 53 51 52                              saveR
+[ 231]    034C: 8A 07                                 mov al, [bx]
+[ 232]    034E: 43                                    inc bx
+[ 233]    034F: 8A 0F                                 mov cl, [bx]
+[ 234]    0351: 43                                    inc bx
+[ 235]    0352: 02 C1                                 add al, cl
+[ 236]    0354: 88 07                                 mov [bx], al
+[ 237]    0356: B2 00                                 mov dl, 0
+[ 238]    0358: E8 53 FF                              call PrintByte
+[ 239]        :                                       
+[ 240]    035B: 43                                    inc bx
+[ 241]    035C: 5A 59 5B                              loadR
+[ 242]    035F: 83 C3 03                              add bx, 3
+[ 243]        :                                       ;colocarC
+[ 244]    0362: E2 E5                                 loop ForJ3
+[ 245]    0364: B4 09 BA 0A 00 CD 21                  saltarL
+[ 246]        :                                       
+[ 247]    036B: 59                                    pop cx
+[ 248]    036C: E2 D3                                 loop ForI3
+[ 249]        :                                       
+[ 250]    036E: C3                                    ret
+[ 251]        :                                       sumar EndP
+[ 252]        :                                       
+[ 253]        :                                       
+[ 254]        :                                       
+[ 255]    036F:                                       proc restar
+[ 256]    036F: B9 00 00                              mov cx, 0h
+[ 257]    0372: BB 09 00                              lea bx, alto
+[ 258]    0375: 8A 0F                                 mov cl, [bx]
+[ 259]        :                                       
+[ 260]    0377: BB 6B 01                              lea bx, matriz
+[ 261]        :                                       
+[ 262]    037A:                                       ForI4:
+[ 263]    037A: 51                                    push cx
+[ 264]    037B: 53                                    push bx
+[ 265]        :                                       
+[ 266]    037C: BB 08 00                              lea bx, ancho
+[ 267]    037F: 8A 0F                                 mov cl, [bx]
+[ 268]        :                                       
+[ 269]    0381: 5B                                    pop bx
+[ 270]    0382:                                       ForJ4:
+[ 271]    0382: 53 51 52                              saveR
+[ 272]    0385: 8A 07                                 mov al, [bx]
+[ 273]    0387: 43                                    inc bx
+[ 274]    0388: 8A 0F                                 mov cl, [bx]
+[ 275]    038A: 43                                    inc bx
+[ 276]        :                                       
+[ 277]        :                                       ;verificando el signo
+[ 278]        :                                       
+[ 279]    038B: 3A C1                                 cmp al, cl
+[ 280]    038D: 73 08                                 jae positivo
+[ 281]    038F: 2A C8                                 sub cl, al
+[ 282]    0391: 88 0F                                 mov [bx], cl
+[ 283]    0393: B2 01                                 mov dl, 1
+[ 284]    0395: EB 06                                 jmp imprimirResta
+[ 285]    0397:                                       positivo:
+[ 286]    0397: 2A C1                                 sub al, cl
+[ 287]    0399: 88 07                                 mov [bx], al
+[ 288]    039B: B2 00                                 mov dl, 0
+[ 289]        :                                       
+[ 290]    039D:                                       imprimirResta:
+[ 291]        :                                       
+[ 292]    039D: E8 0E FF                              call PrintByte
+[ 293]        :                                       
+[ 294]    03A0: 43                                    inc bx
+[ 295]    03A1: 5A 59 5B                              loadR
+[ 296]    03A4: 83 C3 03                              add bx, 3
+[ 297]        :                                       ;colocarC
+[ 298]    03A7: E2 D9                                 loop ForJ4
+[ 299]    03A9: B4 09 BA 0A 00 CD 21                  saltarL
+[ 300]        :                                       
+[ 301]    03B0: 59                                    pop cx
+[ 302]    03B1: E2 C7                                 loop ForI4
+[ 303]        :                                       
+[ 304]    03B3: C3                                    ret
+[ 305]        :                                       restar EndP
+[ 306]        :                                       
+[ 307]        :                                       
+[ 308]        :                                       guardarAl Macro memoria
+[ 309]        :                                       lea bx, memoria
+[ 310]        :                                       mov [bx], al
+[ 311]        :                                       EndM
+[ 312]        :                                       
+[ 313]        :                                       saltarL Macro
+[ 314]        :                                       mov ah, 9
+[ 315]        :                                       lea dx, salto
+[ 316]        :                                       int 21h
+[ 317]        :                                       EndM
+[ 318]        :                                       
+[ 319]        :                                       print Macro dir
+[ 320]        :                                       lea dx, dir
+[ 321]        :                                       mov ah, 9
+[ 322]        :                                       int 21h
+[ 323]        :                                       EndM
+[ 324]        :                                       
+[ 325]        :                                       saveR Macro
+[ 326]        :                                       push bx
+[ 327]        :                                       push cx
+[ 328]        :                                       push dx
+[ 329]        :                                       EndM
+[ 330]        :                                       
+[ 331]        :                                       loadR Macro
+[ 332]        :                                       pop dx
+[ 333]        :                                       pop cx
+[ 334]        :                                       pop bx
+[ 335]        :                                       EndM
+[ 336]        :                                       
+[ 337]        :                                       
+[ 338]    03B4:                                       start:
+[ 339]        :                                       ; set segment registers:
+[ 340]    03B4: B8 00 00                              mov ax, data
+[ 341]    03B7: 8E D8                                 mov ds, ax
+[ 342]    03B9: 8E C0                                 mov es, ax
+[ 343]        :                                       
+[ 344]    03BB: B8 17 00                              mov ax, stack
+[ 345]    03BE: 8E D0                                 mov ss, ax
+[ 346]        :                                       
+[ 347]        :                                       ;impimiendo bienvenida
+[ 348]    03C0: BA 0D 00 B4 09 CD 21                  print mensajeEntrada
+[ 349]    03C7: B4 09 BA 0A 00 CD 21                  saltarL
+[ 350]        :                                       
+[ 351]        :                                       ;pidiendo dimensiones
+[ 352]    03CE: BA 49 00 B4 09 CD 21                  print mDimensiones
+[ 353]    03D5: B4 09 BA 0A 00 CD 21                  saltarL
+[ 354]        :                                       
+[ 355]    03DC: BA 71 00 B4 09 CD 21                  print mAncho
+[ 356]    03E3: E8 8A FE                              call leerEnteroW
+[ 357]    03E6: BB 08 00 88 07                        guardarAl ancho
+[ 358]    03EB: B4 09 BA 0A 00 CD 21                  saltarL
+[ 359]        :                                       
+[ 360]    03F2: BA 84 00 B4 09 CD 21                  print mAlto
+[ 361]    03F9: E8 74 FE                              call leerEnteroW
+[ 362]    03FC: BB 09 00 88 07                        guardarAl alto
+[ 363]    0401: B4 09 BA 0A 00 CD 21                  saltarL
+[ 364]        :                                       
+[ 365]    0408: B4 09 BA 0A 00 CD 21                  saltarL
+[ 366]        :                                       
+[ 367]    040F: BA 97 00 B4 09 CD 21                  print mIngresarValores1
+[ 368]    0416: B4 09 BA 0A 00 CD 21                  saltarL
+[ 369]        :                                       ;preparando para leer las matrices
+[ 370]    041D: B9 00 00                              mov cx, 0h
+[ 371]    0420: BB 09 00                              lea bx, alto
+[ 372]    0423: 8A 0F                                 mov cl, [bx]
+[ 373]        :                                       
+[ 374]    0425: BB 6B 01                              lea bx, matriz
+[ 375]        :                                       
+[ 376]    0428:                                       ForI1:
+[ 377]    0428: 51                                    push cx
+[ 378]    0429: 53                                    push bx
+[ 379]        :                                       
+[ 380]    042A: BB 08 00                              lea bx, ancho
+[ 381]    042D: 8A 0F                                 mov cl, [bx]
+[ 382]        :                                       
+[ 383]    042F: 5B                                    pop bx
+[ 384]    0430:                                       ForJ1:
+[ 385]    0430: E8 3D FE                              call leerEnteroW
+[ 386]    0433: 88 07                                 mov [bx], al
+[ 387]    0435: 83 C3 03                              add bx, 3
+[ 388]    0438: E8 CB FE                              call colocarCursor
+[ 389]        :                                       
+[ 390]    043B: E2 F3                                 loop ForJ1
+[ 391]    043D: B4 09 BA 0A 00 CD 21                  saltarL
+[ 392]        :                                       
+[ 393]    0444: 59                                    pop cx
+[ 394]    0445: E2 E1                                 loop ForI1
+[ 395]        :                                       
+[ 396]        :                                       ;pidiendo la segunda matriz
+[ 397]    0447: B4 09 BA 0A 00 CD 21                  saltarL
+[ 398]    044E: B4 09 BA 0A 00 CD 21                  saltarL
+[ 399]    0455: BA CF 00 B4 09 CD 21                  print mIngresarValores2
+[ 400]    045C: B4 09 BA 0A 00 CD 21                  saltarL
+[ 401]        :                                       ;leyendo la segunda matriz
+[ 402]    0463: B9 00 00                              mov cx, 0h
+[ 403]    0466: BB 09 00                              lea bx, alto
+[ 404]    0469: 8A 0F                                 mov cl, [bx]
+[ 405]        :                                       
+[ 406]    046B: BB 6B 01                              lea bx, matriz
+[ 407]    046E: 43                                    inc bx
+[ 408]        :                                       
+[ 409]    046F:                                       ForI2:
+[ 410]    046F: 51                                    push cx
+[ 411]    0470: 53                                    push bx
+[ 412]        :                                       
+[ 413]    0471: BB 08 00                              lea bx, ancho
+[ 414]    0474: 8A 0F                                 mov cl, [bx]
+[ 415]        :                                       
+[ 416]    0476: 5B                                    pop bx
+[ 417]    0477:                                       ForJ2:
+[ 418]    0477: E8 F6 FD                              call leerEnteroW
+[ 419]    047A: 88 07                                 mov [bx], al
+[ 420]    047C: 83 C3 03                              add bx, 3
+[ 421]    047F: E8 84 FE                              call colocarCursor
+[ 422]        :                                       
+[ 423]    0482: E2 F3                                 loop ForJ2
+[ 424]    0484: B4 09 BA 0A 00 CD 21                  saltarL
+[ 425]        :                                       
+[ 426]    048B: 59                                    pop cx
+[ 427]    048C: E2 E1                                 loop ForI2
+[ 428]        :                                       
+[ 429]        :                                       ;pidiendo la operacion
+[ 430]    048E: B4 09 BA 0A 00 CD 21                  saltarL
+[ 431]    0495: B4 09 BA 0A 00 CD 21                  saltarL
+[ 432]    049C: BA 07 01 B4 09 CD 21                  print mOperacion
+[ 433]    04A3: BA 28 01 B4 09 CD 21                  print mSuma
+[ 434]    04AA: BA 32 01 B4 09 CD 21                  print mResta
+[ 435]        :                                       
+[ 436]    04B1: B4 01                                 mov ah, 1
+[ 437]    04B3: CD 21                                 int 21h
+[ 438]    04B5: BB 6A 01                              lea bx, operacion
+[ 439]    04B8: 88 07                                 mov [bx], al
+[ 440]        :                                       
+[ 441]    04BA: 50                                    push ax
+[ 442]    04BB: B4 09 BA 0A 00 CD 21                  saltarL
+[ 443]    04C2: B4 09 BA 0A 00 CD 21                  saltarL
+[ 444]    04C9: 58                                    pop ax
+[ 445]        :                                       
+[ 446]        :                                       
+[ 447]    04CA: 3C 30                                 cmp al, '0'
+[ 448]    04CC: 74 05                                 je suma
+[ 449]    04CE: E8 9E FE                              call restar
+[ 450]    04D1: EB 03                                 jmp despedir
+[ 451]    04D3:                                       suma:
+[ 452]    04D3: E8 60 FE                              call sumar
+[ 453]        :                                       
+[ 454]    04D6:                                       despedir:
+[ 455]    04D6: BA 3D 01 B4 09 CD 21                  print mDespedida
+[ 456]        :                                       
+[ 457]        :                                       
+[ 458]        :                                       
+[ 459]        :                                       
+[ 460]        :                                       
+[ 461]        :                                       ; wait for any key....
+[ 462]    04DD: B4 01                                 mov ah, 1
+[ 463]    04DF: CD 21                                 int 21h
+[ 464]        :                                       
+[ 465]    04E1: B8 00 4C                              mov ax, 4c00h ; exit to operating system.
+[ 466]    04E4: CD 21                                 int 21h
+[ 467]        :                                       ends
+[ 468]        :                                       
+[ 469]        :                                       end start ; set entry point and stop the assembler.
+[ 470]        :                                       
+[ 471]        :                                       
+ 
+===================================================================================================
+ 
+EXE HEADER - bytes from 0000 to 01FF inclusive.
+
+0000: 4D      -   exe signature (M)
+0001: 5A      -   exe signature (Z)
+0002: E6      -   bytes on last page (l.byte)
+0003: 00      -   bytes on last page (h.byte)
+0004: 04      -   512 byte pages in file (l.byte)
+0005: 00      -   512 byte pages in file (h.byte)
+0006: 02      -   relocations (l.byte)
+0007: 00      -   relocations (h.byte)
+0008: 20      -   paragraphs in header (l.byte)
+0009: 00      -   paragraphs in header (h.byte)
+000A: 00      -   minimum memory (l.byte)
+000B: 00      -   minimum memory (h.byte)
+000C: FF      -   maximum memory (l.byte)
+000D: FF      -   maximum memory (h.byte)
+000E: 17      -   SS - stack segment (l.byte)
+000F: 00      -   SS - stack segment (h.byte)
+0010: 00      -   SP - stack pointer (l.byte)
+0011: 01      -   SP - stack pointer (h.byte)
+0012: 27      -   check sum (l.byte)
+0013: 85      -   check sum (h.byte)
+0014: 44      -   IP - instruction pointer (l.byte)
+0015: 01      -   IP - instruction pointer (h.byte)
+0016: 27      -   CS - code segment (l.byte)
+0017: 00      -   CS - code segment (h.byte)
+0018: 1E      -   relocation table adress (l.byte)
+0019: 00      -   relocation table adress (h.byte)
+001A: 00      -   overlay number (l.byte)
+001B: 00      -   overlay number (h.byte)
+001C: 01      -   signature (l.byte)
+001D: 00      -   signature (h.byte)
+001E: 45      -   relocation table - offset inside segment (l.byte)
+001F: 01      -   relocation table - offset inside segment (h.byte)
+0020: 27      -   relocation table - segment anchor (l.byte)
+0021: 00      -   relocation table - segment anchor (h.byte)
+0022: 4C      -   relocation table - offset inside segment (l.byte)
+0023: 01      -   relocation table - offset inside segment (h.byte)
+0024: 27      -   relocation table - segment anchor (l.byte)
+0025: 00      -   relocation table - segment anchor (h.byte)
+0026 to 01FF  -   reserved relocation area  (00) 
+
+
+
+
+===================================================================================================
